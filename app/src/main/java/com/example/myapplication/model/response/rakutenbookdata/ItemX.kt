@@ -1,5 +1,8 @@
-package com.example.myapplication.responce
+package com.example.myapplication.model.response.rakutenbookdata
 
+import kotlinx.serialization.Serializable
+
+@Serializable
 data class ItemX(
     val affiliateUrl: String,
     val author: String,
