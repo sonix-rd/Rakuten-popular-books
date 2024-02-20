@@ -5,4 +5,4 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class Item(
     val Item: ItemX
-)
+): java.io.Serializable

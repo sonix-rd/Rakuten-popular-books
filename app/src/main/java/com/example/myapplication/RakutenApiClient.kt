@@ -4,7 +4,7 @@ import android.content.res.Resources
 import android.util.Log
 import com.example.myapplication.model.request.RakutenApiRequest
 import com.example.myapplication.model.response.BaseResponse
-import com.example.myapplication.model.response.rakutenbookdata.ApiResponse
+import com.example.myapplication.model.response.ApiResponse
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.android.Android
 import io.ktor.client.features.HttpResponseValidator

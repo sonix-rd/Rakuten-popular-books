@@ -7,7 +7,7 @@
     android:layout_height="wrap_content"
     app:cardCornerRadius="6dp"
     app:cardUseCompatPadding="true">
-    <LinearLayout
+   　 <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -16,7 +16,6 @@
             android:id="@+id/item_image_view"
             android:layout_width="match_parent"
             android:layout_height="160dp" />
-
         <TextView
             android:id="@+id/item_text_view"
             android:textSize="12sp"
