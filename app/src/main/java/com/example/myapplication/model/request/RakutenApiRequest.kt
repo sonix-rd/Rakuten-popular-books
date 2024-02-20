@@ -1,7 +1,7 @@
 package com.example.myapplication.model.request
 
 import com.example.myapplication.model.request.body.ApiRequestBody
-import com.example.myapplication.model.response.rakutenbookdata.ApiResponse
+import com.example.myapplication.model.response.ApiResponse
 import io.ktor.http.HttpMethod
 
 interface RakutenApiRequest<T : ApiResponse> {

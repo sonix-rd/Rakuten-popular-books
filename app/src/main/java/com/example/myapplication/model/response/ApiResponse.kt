@@ -1,4 +1,4 @@
-package com.example.myapplication.model.response.rakutenbookdata
+package com.example.myapplication.model.response
 
 interface ApiResponse {
     val errorCode: Int

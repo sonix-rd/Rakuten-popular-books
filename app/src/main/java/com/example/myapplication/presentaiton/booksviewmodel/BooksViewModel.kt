@@ -16,7 +16,6 @@ class BooksViewModel: ViewModel() {
     val status: LiveData<RakutenApiStatus> get() = _status
     private val _bookData = MutableLiveData<RakutenBookResponse>()
     val bookData: LiveData<RakutenBookResponse> get() = _bookData
-
     init {
         fetchPolularBooks()
     }

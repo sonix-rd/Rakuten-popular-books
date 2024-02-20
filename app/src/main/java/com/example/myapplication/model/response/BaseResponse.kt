@@ -1,6 +1,5 @@
 package com.example.myapplication.model.response
 
-import com.example.myapplication.model.response.rakutenbookdata.ApiResponse
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 

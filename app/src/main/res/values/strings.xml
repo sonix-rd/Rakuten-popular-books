@@ -1,5 +1,10 @@
 <resources>
     <string name="app_name">楽天人気書籍一覧</string>
+    <string name="book_detail">書籍詳細</string>
+    <string name="detail_title">タイトル</string>
+    <string name="detail_explanation">説明</string>
+    <string name="detail_author">著者名</string>
+    <string name="detail_publisher">出版社</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="msg_unknown_error">不明なエラーが発生しました</string>
     <string name="title_error">エラー</string>

@@ -34,4 +34,4 @@ data class ItemX(
     val subTitleKana: String,
     val title: String,
     val titleKana: String
-)
+): java.io.Serializable

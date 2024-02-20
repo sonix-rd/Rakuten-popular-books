@@ -9,5 +9,18 @@
         android:id="@+id/fragment_rakutenbookactivity"
         android:name="com.example.myapplication.presentaiton.RakutenBookActivity"
         tools:layout="@layout/fragment_rakutenbookactivity">
+        <action
+            android:id="@+id/action_fragment_rakutenbookactivity_to_fragmentrakutenbookdetail"
+            app:destination="@id/fragmentrakutenbookdetail" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/fragmentrakutenbookdetail"
+        android:name="com.example.myapplication.presentaiton.RakutenBookdetail"
+        tools:layout="@layout/fragment_rakuten_bookdetail">
+        <argument
+            android:name="item"
+            app:argType="com.example.myapplication.model.response.rakutenbookdata.Item" />
     </fragment>
 </navigation>
