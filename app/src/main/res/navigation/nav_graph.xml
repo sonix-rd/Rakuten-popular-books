@@ -12,7 +12,6 @@
         <action
             android:id="@+id/action_fragment_rakutenbookactivity_to_fragmentrakutenbookdetail"
             app:destination="@id/fragmentrakutenbookdetail" />
-
     </fragment>
 
     <fragment

@@ -16,15 +16,25 @@ class BooksViewModel: ViewModel() {
     val status: LiveData<RakutenApiStatus> get() = _status
     private val _bookData = MutableLiveData<RakutenBookResponse>()
     val bookData: LiveData<RakutenBookResponse> get() = _bookData
+    private val _searchQuery = MutableLiveData<String>()
+    val searchQuery: LiveData<String> get() = _searchQuery
+    private var isReturningFromDetail = false
+    fun setSearchQuery(query: String) {
+        _searchQuery.value = query
+    }
     init {
         fetchPolularBooks()
     }
-    fun fetchPolularBooks() {
+    fun fetchPolularBooks(query: String? = null) {
+        if (isReturningFromDetail) {
+            isReturningFromDetail = false
+            return
+        }
         viewModelScope.launch {
             try {
                 _status.value = RakutenApiStatus.LOADING
                 RakutenApiClient.call(
-                    BooksAcquisitionRequest(),
+                    BooksAcquisitionRequest(query),
                     success = { rakutenBookResponse ->
                         Log.d("BooksViewModel", "Fetched popular books: $rakutenBookResponse")
                         _bookData.value = rakutenBookResponse
@@ -39,5 +49,8 @@ class BooksViewModel: ViewModel() {
                 _status.value = RakutenApiStatus.ERROR
             }
         }
+    }
+    fun setReturningFromDetail(isReturning: Boolean) {
+        isReturningFromDetail = isReturning
     }
 }
