@@ -1,12 +1,14 @@
 package com.example.myapplication.presentaiton
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
@@ -16,14 +18,12 @@ import com.example.myapplication.model.response.RakutenBookResponse
 import com.example.myapplication.model.response.rakutenbookdata.Item
 import com.example.myapplication.presentaiton.booksviewmodel.BookDataGridItemAdapter
 import com.example.myapplication.presentaiton.booksviewmodel.BooksViewModel
-import androidx.appcompat.widget.SearchView
-import com.example.myapplication.model.request.BooksAcquisitionRequest
 
 class RakutenBookActivity : Fragment() {
     private var _binding: FragmentRakutenbookactivityBinding? = null
     private val binding: FragmentRakutenbookactivityBinding get() = _binding!!
     private val viewModel: BooksViewModel by viewModels()
-    private var isFirstLaunch = true
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -40,7 +40,7 @@ class RakutenBookActivity : Fragment() {
             goToItemRditScreen(item)
         }
         recyclerView.adapter = itemAdapter
-
+        binding.swipeRefreshLayout.isRefreshing = true
         viewModel.bookData.observe(viewLifecycleOwner, Observer<RakutenBookResponse> {
             val items = mutableListOf<Item>()
             val res = it.Items.iterator()
@@ -51,8 +51,9 @@ class RakutenBookActivity : Fragment() {
             binding.swipeRefreshLayout.isRefreshing = false
         })
         binding.swipeRefreshLayout.setOnRefreshListener {
+            //初回の再読み込み時
+            viewModel.setReturningFromDetail(false)
             viewModel.fetchPolularBooks()
-            binding.swipeRefreshLayout.isRefreshing = true
         }
     }
 
@@ -65,20 +66,14 @@ class RakutenBookActivity : Fragment() {
 
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
-                if (!isFirstLaunch) {
-                    viewModel.fetchPolularBooks(query)
-                }
-                isFirstLaunch = false // 初回起動フラグを変更
+                //検索ボタンを押した時
+                viewModel.fetchPolularBooks(query)
                 return true
             }
 
             override fun onQueryTextChange(newText: String?): Boolean {
                 // テキストが変更されたときの処理
-                newText?.let {
-                    if (!isFirstLaunch) {
-                        viewModel.fetchPolularBooks(it)
-                    }
-                }
+                newText?.let { viewModel.fetchPolularBooks(it) }
                 return true
             }
         })

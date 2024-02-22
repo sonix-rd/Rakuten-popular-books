@@ -11,28 +11,34 @@ import com.example.myapplication.model.response.RakutenBookResponse
 import kotlinx.coroutines.launch
 
 enum class RakutenApiStatus { LOADING, ERROR, DONE }
-class BooksViewModel: ViewModel() {
+class BooksViewModel : ViewModel() {
     private val _status = MutableLiveData<RakutenApiStatus>()
     val status: LiveData<RakutenApiStatus> get() = _status
+
     private val _bookData = MutableLiveData<RakutenBookResponse>()
     val bookData: LiveData<RakutenBookResponse> get() = _bookData
+
     private val _searchQuery = MutableLiveData<String>()
     val searchQuery: LiveData<String> get() = _searchQuery
+
     private var isReturningFromDetail = false
+
     fun setSearchQuery(query: String) {
         _searchQuery.value = query
     }
+
     init {
         fetchPolularBooks()
     }
+
     fun fetchPolularBooks(query: String? = null) {
-        if (isReturningFromDetail) {
-            isReturningFromDetail = false
-            return
-        }
         viewModelScope.launch {
             try {
                 _status.value = RakutenApiStatus.LOADING
+                if (isReturningFromDetail) {
+                    isReturningFromDetail = false
+                    return@launch
+                }
                 RakutenApiClient.call(
                     BooksAcquisitionRequest(query),
                     success = { rakutenBookResponse ->
@@ -50,6 +56,7 @@ class BooksViewModel: ViewModel() {
             }
         }
     }
+
     fun setReturningFromDetail(isReturning: Boolean) {
         isReturningFromDetail = isReturning
     }

@@ -58,7 +58,7 @@ object RakutenApiClient {
 
     val client = HttpClient(Android) {
         install(HttpTimeout) {
-            requestTimeoutMillis = Long.MAX_VALUE
+            requestTimeoutMillis = 10000
         }
         install(JsonFeature) {
             serializer = KotlinxSerializer(kotlinx.serialization.json.Json {
