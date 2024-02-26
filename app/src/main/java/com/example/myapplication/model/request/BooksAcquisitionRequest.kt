@@ -4,7 +4,8 @@ import com.example.myapplication.model.request.body.ApiRequestBody
 import com.example.myapplication.model.response.RakutenBookResponse
 import io.ktor.http.HttpMethod
 
-class BooksAcquisitionRequest(private val searchKeyword: String? = null) : RakutenApiRequest<RakutenBookResponse>{
+class BooksAcquisitionRequest(private var searchKeyword: String? = null) :
+    RakutenApiRequest<RakutenBookResponse> {
     private val applicationId: String = "1053263810010956500"
     override val path: String = buildPath()
     private fun buildPath(): String {

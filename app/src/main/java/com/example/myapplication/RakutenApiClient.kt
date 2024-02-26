@@ -23,8 +23,12 @@ import io.ktor.http.isSuccess
 import io.ktor.http.takeFrom
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+
 object RakutenApiClient {
-    suspend inline fun <reified T : ApiResponse> call(request: RakutenApiRequest<T>, noinline success: (T) -> Unit, noinline failure: (String) -> Unit
+    suspend inline fun <reified T : ApiResponse> call(
+        request: RakutenApiRequest<T>,
+        noinline success: (T) -> Unit,
+        noinline failure: (String) -> Unit
     ) {
         try {
             val response = client.request<T> {
@@ -51,6 +55,7 @@ object RakutenApiClient {
             }
         }
     }
+
     val client = HttpClient(Android) {
         install(HttpTimeout) {
             requestTimeoutMillis = 10000
@@ -72,7 +77,8 @@ object RakutenApiClient {
             validateResponse {
                 if (it.status.isSuccess()) return@validateResponse
                 val json = kotlinx.serialization.json.Json.Default
-                val bodyText = it.content.readRemaining(headerSizeHint = 4096, limit = 4096 * 30).readText()
+                val bodyText =
+                    it.content.readRemaining(headerSizeHint = 4096, limit = 4096 * 30).readText()
                 val errorResponse = try {
                     json.decodeFromString(BaseResponse.serializer(), bodyText)
                 } catch (t: Throwable) {

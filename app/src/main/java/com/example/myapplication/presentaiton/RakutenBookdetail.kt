@@ -25,7 +25,13 @@ class RakutenBookdetail : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentRakutenBookdetailBinding.bind(inflater.inflate(R.layout.fragment_rakuten_bookdetail, container, false))
+        _binding = FragmentRakutenBookdetailBinding.bind(
+            inflater.inflate(
+                R.layout.fragment_rakuten_bookdetail,
+                container,
+                false
+            )
+        )
         return binding.root
     }
 
@@ -35,12 +41,11 @@ class RakutenBookdetail : Fragment() {
         val imgUrl = item.largeImageUrl.toUri().buildUpon().scheme("https").build()
         Glide.with(binding.bookImage.context)
             .load(imgUrl)
-            .apply(
-            RequestOptions()
-                .placeholder(R.drawable.loading_animation)
-                .error(R.drawable.ic_baseline_broken_image_24)
-                .fitCenter()
-        )
+            .also { requestOptions ->
+                requestOptions.placeholder(R.drawable.loading_animation)
+                requestOptions.error(R.drawable.ic_baseline_broken_image_24)
+                requestOptions.fitCenter()
+            }
             .into(binding.bookImage)
         binding.bookTitle.text = item.title
         binding.bookExplanation.text = item.itemCaption

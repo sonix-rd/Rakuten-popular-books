@@ -7,10 +7,10 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.myapplication.R
 import com.example.myapplication.databinding.FragmentRakutenbookactivityBinding
 import com.example.myapplication.model.response.RakutenBookResponse
@@ -22,6 +22,7 @@ class RakutenBookActivity : Fragment() {
     private var _binding: FragmentRakutenbookactivityBinding? = null
     private val binding: FragmentRakutenbookactivityBinding get() = _binding!!
     private val viewModel: BooksViewModel by viewModels()
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -35,10 +36,10 @@ class RakutenBookActivity : Fragment() {
         setHasOptionsMenu(true)
         val recyclerView = binding.bookItemGridView
         val itemAdapter = BookDataGridItemAdapter { item ->
-                goToItemRditScreen(item)
+            goToItemRditScreen(item)
         }
         recyclerView.adapter = itemAdapter
-
+        binding.swipeRefreshLayout.isRefreshing = true
         viewModel.bookData.observe(viewLifecycleOwner, Observer<RakutenBookResponse> {
             val items = mutableListOf<Item>()
             val res = it.Items.iterator()
@@ -46,20 +47,53 @@ class RakutenBookActivity : Fragment() {
                 items.add(item)
             }
             itemAdapter.submitList(items)
+            binding.swipeRefreshLayout.isRefreshing = false
         })
         binding.swipeRefreshLayout.setOnRefreshListener {
+            //初回の再読み込み時
+            viewModel.setReturningFromDetail(false)
             viewModel.fetchPolularBooks()
-            binding.swipeRefreshLayout.isRefreshing = false
         }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
         inflater.inflate(R.menu.search, menu)
+        val searchItem = menu.findItem(R.id.action_search)
+        val searchView = searchItem.actionView as SearchView
+        searchView.queryHint = getString(R.string.search_hint)
+
+        viewModel.searchQuery.observe(viewLifecycleOwner, Observer { query ->
+            if (!query.isNullOrEmpty()) {
+                searchItem.expandActionView()
+                searchView.setQuery(query, false)
+                searchView.clearFocus()
+            }
+        })
+
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                //検索ボタンを押した時
+                viewModel.setSearchQuery(query ?: "")
+                viewModel.fetchPolularBooks(query)
+                return true
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                // テキストが変更されたときの処理
+                newText?.let { viewModel.fetchPolularBooks(it) }
+                return true
+            }
+        })
     }
+
     private fun goToItemRditScreen(item: Item) {
-        //データを渡す時後で引数を入れる
-        val action = RakutenBookActivityDirections.actionFragmentRakutenbookactivityToFragmentrakutenbookdetail(item)
+        val searchQuery = viewModel.searchQuery.value ?: ""
+        val action =
+            RakutenBookActivityDirections.actionFragmentRakutenbookactivityToFragmentrakutenbookdetail(
+                item,
+                searchQuery
+            )
         findNavController().navigate(action)
         requireActivity().title = getString((R.string.book_detail))
     }
@@ -67,6 +101,8 @@ class RakutenBookActivity : Fragment() {
     override fun onResume() {
         super.onResume()
         requireActivity().title = getString((R.string.app_name))
+        // 詳細画面から戻ってきて、検索アイコンをタップした時の更新の抑制
+        viewModel.setReturningFromDetail(true)
     }
 
     override fun onDestroyView() {

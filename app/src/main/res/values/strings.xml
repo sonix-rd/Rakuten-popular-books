@@ -5,6 +5,7 @@
     <string name="detail_explanation">説明</string>
     <string name="detail_author">著者名</string>
     <string name="detail_publisher">出版社</string>
+    <string name="search_hint">検索ワードを入力してください</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="msg_unknown_error">不明なエラーが発生しました</string>
     <string name="title_error">エラー</string>

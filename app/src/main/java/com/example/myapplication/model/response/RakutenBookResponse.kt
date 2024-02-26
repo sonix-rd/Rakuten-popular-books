@@ -19,4 +19,4 @@ data class RakutenBookResponse(
     override val errorCode: Int = 0,
     @SerialName("error_message")
     override val errorMessage: String = ""
-): ApiResponse
+) : ApiResponse
