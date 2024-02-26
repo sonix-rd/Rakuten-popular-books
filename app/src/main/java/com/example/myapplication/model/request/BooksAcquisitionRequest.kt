@@ -15,7 +15,6 @@ class BooksAcquisitionRequest(private var searchKeyword: String? = null) :
             "/services/api/BooksBook/Search/20170404?format=json&title=${searchKeyword}&booksGenreId=001004008&applicationId=$applicationId"
         }
     }
-
     override val method: HttpMethod = HttpMethod.Get
     override val body: ApiRequestBody? = null
 }

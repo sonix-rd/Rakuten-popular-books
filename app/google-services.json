@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "604684495128",
+    "project_id": "rakutenbook-12c3f",
+    "storage_bucket": "rakutenbook-12c3f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:604684495128:android:6abb0c6f575ac02f31566d",
+        "android_client_info": {
+          "package_name": "com.example.myapplication"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDh10OVIsSdDLuj-WhRPML2MQNNgltYsfA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

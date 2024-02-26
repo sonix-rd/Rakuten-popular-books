@@ -14,15 +14,11 @@ enum class RakutenApiStatus { LOADING, ERROR, DONE }
 class BooksViewModel : ViewModel() {
     private val _status = MutableLiveData<RakutenApiStatus>()
     val status: LiveData<RakutenApiStatus> get() = _status
-
     private val _bookData = MutableLiveData<RakutenBookResponse>()
     val bookData: LiveData<RakutenBookResponse> get() = _bookData
-
-    private val _searchQuery = MutableLiveData<String>()
-    val searchQuery: LiveData<String> get() = _searchQuery
-
     private var isReturningFromDetail = false
-
+    private var _searchQuery = MutableLiveData<String>()
+    val searchQuery: LiveData<String> get() = _searchQuery
     fun setSearchQuery(query: String) {
         _searchQuery.value = query
     }

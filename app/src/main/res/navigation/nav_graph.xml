@@ -21,5 +21,8 @@
         <argument
             android:name="item"
             app:argType="com.example.myapplication.model.response.rakutenbookdata.Item" />
+        <argument
+            android:name="searchQuery"
+            app:argType="string" />
     </fragment>
 </navigation>

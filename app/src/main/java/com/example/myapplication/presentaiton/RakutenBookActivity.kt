@@ -1,7 +1,6 @@
 package com.example.myapplication.presentaiton
 
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.Menu
@@ -64,9 +63,18 @@ class RakutenBookActivity : Fragment() {
         val searchView = searchItem.actionView as SearchView
         searchView.queryHint = getString(R.string.search_hint)
 
+        viewModel.searchQuery.observe(viewLifecycleOwner, Observer { query ->
+            if (!query.isNullOrEmpty()) {
+                searchItem.expandActionView()
+                searchView.setQuery(query, false)
+                searchView.clearFocus()
+            }
+        })
+
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 //検索ボタンを押した時
+                viewModel.setSearchQuery(query ?: "")
                 viewModel.fetchPolularBooks(query)
                 return true
             }
@@ -80,9 +88,11 @@ class RakutenBookActivity : Fragment() {
     }
 
     private fun goToItemRditScreen(item: Item) {
+        val searchQuery = viewModel.searchQuery.value ?: ""
         val action =
             RakutenBookActivityDirections.actionFragmentRakutenbookactivityToFragmentrakutenbookdetail(
-                item
+                item,
+                searchQuery
             )
         findNavController().navigate(action)
         requireActivity().title = getString((R.string.book_detail))
@@ -91,7 +101,7 @@ class RakutenBookActivity : Fragment() {
     override fun onResume() {
         super.onResume()
         requireActivity().title = getString((R.string.app_name))
-        // 詳細画面から戻ってきた場合はフラグをセット
+        // 詳細画面から戻ってきて、検索アイコンをタップした時の更新の抑制
         viewModel.setReturningFromDetail(true)
     }
 
